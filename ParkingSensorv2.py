@@ -1,4 +1,5 @@
-import RPi as GPIO
+#!/usr/bin/env python
+import RPi.GPIO as GPIO
 import time
 
 GPIO.setmode(GPIO.BCM)
@@ -8,7 +9,7 @@ yellowLedPin = 3
 redLedPin = 2
 trigPin = 17
 echoPin = 27
-switch = 0 #placeholder for now
+switch = 22 #placeholder for now
 
 #Setting each pin as an input or output
 GPIO.setup(greenLedPin, GPIO.OUT)
@@ -33,21 +34,24 @@ try:
         distance = round(pulse_duration*17150, 2)
         print ("Distance: ",distance, " cm")
 
-        if GPIO.input(switch) == GPIO.HIGH:
+        if GPIO.input(switch) == GPIO.LOW:
             GPIO.output(greenLedPin, GPIO.HIGH)
             GPIO.output(yellowLedPin, GPIO.LOW)
-            if (distance<=5):
+            GPIO.output(redLedPin, GPIO.LOW)
+            if (distance<=10):
                 GPIO.output(greenLedPin, GPIO.LOW)
                 GPIO.output(yellowLedPin, GPIO.LOW)
                 GPIO.output(redLedPin, GPIO.HIGH)
 
-        if GPIO.input(switch) == GPIO.LOW:
+        if GPIO.input(switch) == GPIO.HIGH:
             GPIO.output(greenLedPin, GPIO.LOW)
             GPIO.output(yellowLedPin, GPIO.HIGH)
-            if (distance<=5):
+            GPIO.output(redLedPin, GPIO.LOW)
+            if (distance<=10):
                 GPIO.output(greenLedPin, GPIO.LOW)
                 GPIO.output(yellowLedPin, GPIO.LOW)
                 GPIO.output(redLedPin, GPIO.HIGH)
+
 except KeyboardInterrupt:
     print("Measurement Stopped by  User")
     GPIO.cleanup()

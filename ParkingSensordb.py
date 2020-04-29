@@ -6,7 +6,7 @@ import psycopg2
 # Connection to the database
 conn = psycopg2.connect(
     host="localhost",
-    database="test",
+    database="parkingavailability",
     user="pi",
     password="henny")
 
@@ -54,8 +54,9 @@ while (time.time()<i):
             GPIO.output(greenLedPin, GPIO.LOW)
             GPIO.output(yellowLedPin, GPIO.LOW)
             GPIO.output(redLedPin, GPIO.HIGH)
-            cur.execute("insert into project_test (spaceid,availabilty,now_date,now_time) values (1,'OCCUPIED' , NOW()::DATE, NOW()::TIMETZ)")
-        cur.execute("insert into project_test (spaceid,availabilty,now_date,now_time) values (1,'AVAILABLE' , NOW()::DATE, NOW()::TIMETZ)")
+            cur.execute("insert into parking_availability (spaceid,availabilty,date, time) values (1,'OCCUPIED' , NOW()::DATE, NOW()::TIMETZ)")
+        else:
+            cur.execute("insert into parking_availability (spaceid,availabilty,date,time) values (1,'AVAILABLE' , NOW()::DATE, NOW()::TIMETZ)")
 
     if GPIO.input(switch) == GPIO.HIGH:
         GPIO.output(greenLedPin, GPIO.LOW)
@@ -65,11 +66,13 @@ while (time.time()<i):
             GPIO.output(greenLedPin, GPIO.LOW)
             GPIO.output(yellowLedPin, GPIO.LOW)
             GPIO.output(redLedPin, GPIO.HIGH)
-            cur.execute("insert into project_test (spaceid,availabilty,now_date,now_time) values (1,'OCCUPIED' , NOW()::DATE, NOW()::TIMETZ)")
-        cur.execute("insert into project_test (spaceid,availabilty,now_date,now_time) values (1,'Reserved' , NOW()::DATE, NOW()::TIMETZ)")
+            cur.execute("insert into parking_availability (spaceid,availabilty,date,time) values (1,'OCCUPIED' , NOW()::DATE, NOW()::TIMETZ)")
+        else:
+            cur.execute("insert into parking_availability (spaceid,availabilty,date,time) values (1,'Reserved' , NOW()::DATE, NOW()::TIMETZ)")
     time.sleep(5)
 
-cur.execute("select rownumber,spaceid,availabilty,now_date,now_time from project_test")
+GPIO.cleanup()
+cur.execute("select rownum,spaceid,availabilty,date,time from parking_availability")
 
 # Fetches the rows in the table
 rows = cur.fetchall()
