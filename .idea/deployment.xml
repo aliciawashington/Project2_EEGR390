@@ -9,6 +9,13 @@
           </mappings>
         </serverdata>
       </paths>
+      <paths name="pi@10.0.1.21:22">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/pi/Project2_EEGR390" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
     </serverData>
   </component>
 </project>

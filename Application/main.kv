@@ -1,0 +1,117 @@
+<ItemDrawer>:
+    theme_text_color: "Custom"
+    on_release:
+        self.parent.set_color_item(self)
+
+    IconLeftWidget:
+        id: icon
+        icon: root.icon
+        theme_text_color: "Custom"
+        text_color: root.text_color
+
+
+<ContentNavigationDrawer>:
+    orientation: "vertical"
+    padding: "8dp"
+    spacing: "8dp"
+
+    AnchorLayout:
+        anchor_x: "left"
+        size_hint_y: None
+        height: avatar.height
+
+        Image:
+            id: avatar
+            size_hint: None, None
+            size: "200dp", "56dp"
+            source: "morgan_logo.png"
+
+    MDLabel:
+        text: "Parking Reservation"
+        font_style: "Button"
+        size_hint_y: None
+        height: self.texture_size[1]
+
+    MDLabel:
+        text: "brought to you by Team Hennessey"
+        font_style: "Caption"
+        size_hint_y: None
+        height: self.texture_size[1]
+
+    ScrollView:
+
+        DrawerList:
+            id: md_list
+
+Screen:
+    id: scr
+    NavigationLayout:
+        ScreenManager:
+            Screen:
+                name: "current screen"
+
+                BoxLayout:
+                    orientation: 'vertical'
+                    MDToolbar:
+                        title: "Parking Reservation"
+                        md_bg_color: app.theme_cls.primary_color
+                        left_action_items: [['menu', lambda x: nav_drawer.set_state("toggle")]]
+                        right_action_items: [['backspace-outline', lambda x: app.goback()]]
+
+                    ScreenManager:
+                        id: screen_manager
+                        Screen:
+                            name: "screen1"
+                            BoxLayout:
+                                orientation: 'vertical'
+                                AsyncImage:
+                                    source: 'https://www.smartsight.in/wp-content/uploads/2019/08/parking-app-300x168.jpg'
+                                    size_hint: 1, .5
+                                    pos_hint: {'center_x':.5,'center_y':.5}
+
+                                Button:
+                                    text:"Reserve your parking now!"
+                                    size_hint: 0.5,0.2
+                                    pos_hint: {'center_x': 0.5, 'center_y': .5}
+                                    on_release: app.start_reservation()
+                                    valign: 'middle'
+                                    halign: 'center'
+                        Screen:
+
+                            name: "screen2"
+                            BoxLayout:
+                                orientation: 'vertical'
+                                MDToolbar:
+                                    title: "Parking Reservation"
+                                    md_bg_color: app.theme_cls.primary_color
+                                    left_action_items: [['menu', lambda x: nav_drawer.set_state("toggle")]]
+
+                            GridLayout:
+                                cols: 1
+                                GridLayout:
+                                    cols:2
+
+                                    MDLabel:
+                                        id: spaceid_static
+                                        text: "Space ID"
+                                    MDLabel:
+                                        id: spaceid_dynamic
+                                        text: "1"
+                                    MDLabel:
+                                        id: avail_static
+                                        text: "Availability"
+                                    MDLabel:
+                                        id: avail_dynamic
+                                        text: "Available"
+                                Button:
+                                    id: refresh
+                                    text: "Refresh"
+                                    on_release: app.refresh_reservation()
+
+
+        MDNavigationDrawer:
+            id: nav_drawer
+
+            ContentNavigationDrawer:
+                id: content_drawer
+

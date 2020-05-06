@@ -1,0 +1,33 @@
+#:import FadeTransition kivy.uix.screenmanager.FadeTransition
+ScreenManager:
+    transition: FadeTransition()
+    HomeScreen:
+    SelectionScreen:
+
+<HomeScreen>:
+    name: 'first'
+    BoxLayout:
+        orientation: 'vertical'
+        Image:
+            source: 'morgan_logo.png'
+            allow_stretch: True
+            keep_ratio: True
+        BoxLayout:
+            Button:
+                text: 'reserve you parking now'
+                font_size: 30
+                on_release: app.root.current = 'second'
+
+<SelectionScreen>:
+    name: 'second'
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: 'second screen!'
+            font_size: 30
+        BoxLayout:
+            Button:
+                text: 'back home'
+                font_size: 30
+                on_release: app.root.current = 'first'
+
