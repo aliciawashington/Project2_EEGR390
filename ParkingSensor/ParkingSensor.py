@@ -14,6 +14,7 @@ try:
         if state.value == False:#The parking space is not reserved (Green LED should be HIGH)
             greenled.on()
             yellowled.off()
+            redled.off()
             if sensor.distance <= 0.5:
                 redled.on()
                 greenled.off()
@@ -21,11 +22,13 @@ try:
         if state.value == True: #The parking space is reserved (Yellow LED should be HIGH)
             greenled.off()
             yellowled.on()
+            redled.off()
             if sensor.distance <= 0.5:
                 redled.on()
                 greenled.off()
                 yellowled.off()
-        redled.off()
+        
         print('Distance to nearest object is ', sensor.distance, 'm')
+        time.sleep(0.05)
 except KeyboardInterrupt:
     print("Measurement stopped by User")

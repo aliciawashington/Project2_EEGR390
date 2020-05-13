@@ -6,17 +6,44 @@ from kivymd.app import MDApp
 from kivymd.theming import ThemableBehavior
 from kivymd.uix.list import OneLineIconListItem, MDList
 
-import psycopg2
+from gpiozero import DistanceSensor, LED, Button
+import time
 
-#Establish a Connection with the data base
-#conn = psycopg2.connect(
-   # host="localhost",
-    #database="test",
-    #user="pi",
-    #password="henny")
+def parking_sensor():
+    # Initializaiton of variables
+    TRIG = 17
+    ECHO = 27
+    redled = LED(2)
+    yellowled = LED(3)
+    greenled = LED(4)
+    state = Button(22)
+    sensor = DistanceSensor(ECHO, TRIG)
+    try:
+        while True:
+            if state.value == False:  # The parking space is not reserved (Green LED should be HIGH)
+                greenled.on()
+                yellowled.off()
+                redled.off()
+                if sensor.distance <= 0.1:
+                    redled.on()
+                    greenled.off()
+                    yellowled.off()
+            if state.value == True:  # The parking space is reserved (Yellow LED should be HIGH)
+                greenled.off()
+                yellowled.on()
+                redled.off()
+                if sensor.distance <= 0.1:
+                    redled.on()
+                    greenled.off()
+                    yellowled.off()
+            print('Distance to nearest object is ', sensor.distance * 100, 'cm')
+            time.sleep(1)
+    except KeyboardInterrupt:
+        print("Measurement stopped by User")
+        redled.close()
+        greenled.close()
+        yellowled.close()
 
-#Cursor for database interactions
-#cur = conn.cursor()
 
 class ContentNavigationDrawer(BoxLayout):
     pass
@@ -63,22 +90,16 @@ class NavDrawerAndScreenManagerApp(MDApp):
                        on_release=self.openScreen)
         )
     def start_reservation(self):
-        ##Establish a connection with server
-        ##Create the Cursor for executions
-        ##Do some logic to check if the space is available at the time of fetch
-        ##like so maybe only fetch the most recent time stamped line
-        ##everytime this method is called via the button on the home screen
         self.root.ids.screen_manager.current = "screen2"
-        ## In this method is where the function will call to the database
+
     def refresh_reservation(self):
         self.root.ids.screen_manager.current = "screen2"
+
     def goback(self):
         self.root.ids.screen_manager.current = "screen1"
 
 
 if __name__ == "__main__":
+    parking_sensor()
     NavDrawerAndScreenManagerApp().run()
 
-
-#Closes the connection with the database
-#cur.close()
